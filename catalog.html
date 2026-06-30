@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Каталог — The Gabby</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #7B9BD4; --blue-dark: #4F6FA0; --terracotta: #BD451E;
+    --offwhite: #F9F9F9; --ink: #1A1A18; --ink-soft: #4A4A46; --line: rgba(26,26,24,0.1);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Montserrat',sans-serif; background:var(--offwhite); color:var(--ink); -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+
+  .nav {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 24px; border-bottom:1px solid var(--line); background:var(--offwhite);
+    position:sticky; top:0; z-index:100;
+  }
+  .nav-logo { font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:500; font-size:20px; color:var(--blue-dark); }
+  .nav-back { font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); }
+  .nav-back:hover { color:var(--ink); }
+
+  main { max-width:1100px; margin:0 auto; padding:56px 24px 96px; }
+
+  .page-header { margin-bottom:40px; }
+  .page-eyebrow { font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:10px; }
+  h1 { font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:500; font-size:clamp(28px,5vw,42px); color:var(--ink); }
+
+  .collection-grid {
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap:32px 24px;
+  }
+
+  .product-card { cursor:pointer; }
+  .product-photo {
+    background:#E4E4E0;
+    aspect-ratio:3/4;
+    border-radius:2px;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    color:#a8a8a3;
+    margin-bottom:12px;
+    transition:opacity 0.25s ease;
+  }
+  .product-photo:hover { opacity:0.88; }
+  .product-photo img { width:100%; height:100%; object-fit:cover; display:block; }
+  .product-name { font-size:13px; letter-spacing:0.04em; margin-bottom:5px; }
+  .product-price { font-size:13px; color:var(--ink-soft); }
+
+  .btn-primary {
+    display:inline-block; background:var(--terracotta); color:#fff;
+    font-size:12px; letter-spacing:.08em; text-transform:uppercase;
+    padding:12px 24px; border-radius:3px; border:none; cursor:pointer;
+    transition:background 0.25s ease; margin-top:8px; width:100%;
+  }
+  .btn-primary:hover { background:#9c3a18; }
+
+  footer { background:var(--ink); color:rgba(255,255,255,0.7); text-align:center; padding:48px 24px 32px; margin-top:80px; }
+  footer .footer-logo { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:24px; color:var(--blue); display:block; margin-bottom:24px; }
+  footer .footer-links { display:flex; flex-wrap:wrap; justify-content:center; gap:18px; list-style:none; margin-bottom:18px; }
+  footer .footer-links a { color:rgba(255,255,255,0.8); font-size:12.5px; }
+  footer .footer-links a:hover { color:#fff; text-decoration:underline; }
+  footer .footer-legal { font-size:11px; color:rgba(255,255,255,0.35); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="index.html">The Gabby</a>
+  <a class="nav-back" href="index.html">&larr; на главную</a>
+</nav>
+
+<main>
+  <div class="page-header">
+    <p class="page-eyebrow">the gabby</p>
+    <h1>Новая коллекция</h1>
+  </div>
+  <div class="collection-grid" id="collectionGrid">
+    <p style="grid-column:1/-1;text-align:center;color:var(--ink-soft);font-size:13px;">загружаем коллекцию…</p>
+  </div>
+</main>
+
+<footer>
+  <span class="footer-logo">The Gabby</span>
+  <ul class="footer-links">
+    <li><a href="catalog.html">каталог</a></li>
+    <li><a href="about.html">о бренде</a></li>
+    <li><a href="delivery.html">доставка и оплата</a></li>
+    <li><a href="sizes.html">размерная сетка</a></li>
+    <li><a href="returns.html">возврат и обмен</a></li>
+    <li><a href="contacts.html">контакты</a></li>
+    <li><a href="track.html">отследить заказ</a></li>
+  </ul>
+  <p class="footer-legal">© 2026 The Gabby. Политика конфиденциальности</p>
+</footer>
+
+<script>
+  function formatPrice(n) {
+    return Math.round(n).toLocaleString('ru-RU') + ' ₽';
+  }
+
+  async function loadProducts() {
+    const grid = document.getElementById('collectionGrid');
+    let products = [];
+    try {
+      const res = await fetch('/api/products');
+      if (!res.ok) throw new Error();
+      products = await res.json();
+    } catch {
+      grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--ink-soft);font-size:13px;">не удалось загрузить коллекцию, попробуйте обновить страницу</p>';
+      return;
+    }
+
+    if (!products.length) {
+      grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--ink-soft);font-size:13px;">коллекция скоро появится</p>';
+      return;
+    }
+
+    grid.innerHTML = products.map(p => `
+      <div class="product-card">
+        <div class="product-photo">${p.image_url
+          ? `<img src="${p.image_url}" alt="${p.name}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${p.name}'}))">`
+          : p.name}</div>
+        <p class="product-name">${p.name}</p>
+        <p class="product-price">${formatPrice(p.price)}</p>
+        <a href="index.html#collection" class="btn-primary">в корзину</a>
+      </div>
+    `).join('');
+  }
+
+  loadProducts();
+</script>
+</body>
+</html>
