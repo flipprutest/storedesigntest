@@ -23,10 +23,8 @@
     position:sticky; top:0; z-index:100;
   }
   .nav-logo { font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:500; font-size:20px; color:var(--blue-dark); }
-  .nav-back { font-size:20px; color:var(--ink-soft); cursor:pointer; }
-  .nav-back:hover { color:var(--ink); }
-  .nav-bag { font-size:20px; color:var(--ink-soft); cursor:pointer; position:relative; }
-  .nav-bag:hover { color:var(--ink); }
+  .nav-bag { cursor:pointer; position:relative; width:64px; height:64px; display:flex; align-items:center; justify-content:center; }
+  .nav-bag img { width:64px; height:64px; object-fit:contain; display:block; }
   .cart-badge {
     position:absolute; top:-6px; right:-8px;
     background:var(--terracotta); color:#fff;
@@ -138,9 +136,8 @@
 <body>
 
 <nav class="nav">
-  <a class="nav-back" href="index.html">&#9776;</a>
   <a class="nav-logo" href="index.html">The Gabby</a>
-  <span class="nav-bag" id="cartTrigger">&#128722;<span class="cart-badge" id="cartBadge"></span></span>
+  <span class="nav-bag" id="cartTrigger"><img src="cart-icon.png" alt="корзина"><span class="cart-badge" id="cartBadge"></span></span>
 </nav>
 
 <main>
@@ -156,7 +153,7 @@
 <footer>
   <span class="footer-logo">The Gabby</span>
   <ul class="footer-links">
-    <li><a href="/catalog.html">каталог</a></li>
+    <li><a href="catalog.html">каталог</a></li>
     <li><a href="about.html">о бренде</a></li>
     <li><a href="delivery.html">доставка и оплата</a></li>
     <li><a href="sizes.html">размерная сетка</a></li>
@@ -194,10 +191,10 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  let cart = JSON.parse(sessionStorage.getItem('gabby_cart') || '[]');
+  let cart = JSON.parse(localStorage.getItem('gabby_cart') || '[]');
   let products = [];
 
-  function saveCart() { sessionStorage.setItem('gabby_cart', JSON.stringify(cart)); }
+  function saveCart() { localStorage.setItem('gabby_cart', JSON.stringify(cart)); }
 
   function formatPrice(n) { return Math.round(n).toLocaleString('ru-RU') + ' ₽'; }
 

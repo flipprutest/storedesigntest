@@ -742,7 +742,9 @@
     justify-content: center;
     line-height: 1;
   }
-  .nav-bag { position: relative; }
+  .nav-bag { position: relative; display:flex; align-items:center; justify-content:center; width:64px; height:64px; }
+  .nav-bag img { width:64px; height:64px; object-fit:contain; display:block; filter:brightness(0) invert(1); transition:filter 0.4s ease; }
+  .nav.scrolled .nav-bag img { filter:none; }
 
   /* ===== COOKIE BANNER ===== */
   .cookie-banner {
@@ -821,7 +823,7 @@
     <li class="drawer-has-sub">
       <span class="drawer-item-toggle" id="drawerCatalog">каталог <span class="drawer-arrow">›</span></span>
       <ul class="drawer-sub">
-        <li><a href="/catalog.html">новая коллекция</a></li>
+        <li><a href="catalog.html">новая коллекция</a></li>
       </ul>
     </li>
     <li><a href="about.html">о бренде</a></li>
@@ -836,7 +838,7 @@
 <nav class="nav" id="nav">
   <span class="nav-burger" id="drawerTrigger">&#9776;</span>
   <span class="nav-logo logo-script">The Gabby</span>
-  <span class="nav-bag" id="cartTrigger" role="button" aria-label="Открыть корзину">&#128722;<span class="cart-badge" id="cartBadge" style="display:none">0</span></span>
+  <span class="nav-bag" id="cartTrigger" role="button" aria-label="Открыть корзину"><img src="cart-icon.png" alt="корзина"><span class="cart-badge" id="cartBadge" style="display:none">0</span></span>
 </nav>
 
 <section class="hero" style="padding:0; max-width:none;">
@@ -860,7 +862,7 @@
   <div class="collection-grid" id="collectionGrid">
     <p style="grid-column:1/-1;text-align:center;color:var(--ink-soft);font-size:13px;">загружаем коллекцию…</p>
   </div>
-  <a href="/catalog.html" class="view-all">смотреть всё →</a>
+  <a href="catalog.html" class="view-all">смотреть всё →</a>
 </section>
 
 <section class="lifestyle" style="padding:0;">
@@ -998,10 +1000,10 @@
   }, { threshold: 0.15 });
   reveals.forEach(el => observer.observe(el));
 
-  let cart = JSON.parse(sessionStorage.getItem('gabby_cart') || '[]');
+  let cart = JSON.parse(localStorage.getItem('gabby_cart') || '[]');
   let products = [];
 
-  function saveCart() { sessionStorage.setItem('gabby_cart', JSON.stringify(cart)); }
+  function saveCart() { localStorage.setItem('gabby_cart', JSON.stringify(cart)); }
 
   function formatPrice(n) {
     return Math.round(n).toLocaleString('ru-RU') + ' ₽';
