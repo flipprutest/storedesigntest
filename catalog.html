@@ -16,54 +16,117 @@
   body { font-family:'Montserrat',sans-serif; background:var(--offwhite); color:var(--ink); -webkit-font-smoothing:antialiased; }
   a { color:inherit; text-decoration:none; }
 
+  /* NAV */
   .nav {
     display:flex; align-items:center; justify-content:space-between;
     padding:18px 24px; border-bottom:1px solid var(--line); background:var(--offwhite);
     position:sticky; top:0; z-index:100;
   }
   .nav-logo { font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:500; font-size:20px; color:var(--blue-dark); }
-  .nav-back { font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); }
+  .nav-back { font-size:20px; color:var(--ink-soft); cursor:pointer; }
   .nav-back:hover { color:var(--ink); }
+  .nav-bag { font-size:20px; color:var(--ink-soft); cursor:pointer; position:relative; }
+  .nav-bag:hover { color:var(--ink); }
+  .cart-badge {
+    position:absolute; top:-6px; right:-8px;
+    background:var(--terracotta); color:#fff;
+    font-size:10px; width:16px; height:16px;
+    border-radius:50%; display:none;
+    align-items:center; justify-content:center; line-height:1;
+  }
 
+  /* MAIN */
   main { max-width:1100px; margin:0 auto; padding:56px 24px 96px; }
-
   .page-header { margin-bottom:40px; }
   .page-eyebrow { font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:10px; }
   h1 { font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:500; font-size:clamp(28px,5vw,42px); color:var(--ink); }
 
   .collection-grid {
     display:grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
     gap:32px 24px;
   }
-
   .product-card { cursor:pointer; }
   .product-photo {
-    background:#E4E4E0;
-    aspect-ratio:3/4;
-    border-radius:2px;
-    overflow:hidden;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:12px;
-    color:#a8a8a3;
-    margin-bottom:12px;
+    background:#E4E4E0; aspect-ratio:3/4; border-radius:2px;
+    overflow:hidden; display:flex; align-items:center; justify-content:center;
+    font-size:12px; color:#a8a8a3; margin-bottom:12px;
     transition:opacity 0.25s ease;
   }
   .product-photo:hover { opacity:0.88; }
   .product-photo img { width:100%; height:100%; object-fit:cover; display:block; }
   .product-name { font-size:13px; letter-spacing:0.04em; margin-bottom:5px; }
-  .product-price { font-size:13px; color:var(--ink-soft); }
-
-  .btn-primary {
-    display:inline-block; background:var(--terracotta); color:#fff;
-    font-size:12px; letter-spacing:.08em; text-transform:uppercase;
-    padding:12px 24px; border-radius:3px; border:none; cursor:pointer;
-    transition:background 0.25s ease; margin-top:8px; width:100%;
+  .product-price { font-size:13px; color:var(--ink-soft); margin-bottom:10px; }
+  .add-to-cart {
+    display:block; width:100%; background:var(--terracotta); color:#fff;
+    font-family:'Montserrat',sans-serif; font-size:12px; letter-spacing:.08em;
+    text-transform:uppercase; padding:12px; border-radius:3px; border:none;
+    cursor:pointer; transition:background 0.25s ease;
   }
-  .btn-primary:hover { background:#9c3a18; }
+  .add-to-cart:hover { background:#9c3a18; }
+  .add-to-cart:disabled { background:#c8c8c4; cursor:default; }
 
+  /* CART */
+  .cart-overlay {
+    position:fixed; inset:0; background:rgba(20,20,18,0.4);
+    z-index:200; opacity:0; pointer-events:none; transition:opacity 0.3s ease;
+  }
+  .cart-overlay.open { opacity:1; pointer-events:auto; }
+  .cart-panel {
+    position:fixed; top:0; right:0; bottom:0; width:100%; max-width:420px;
+    background:var(--offwhite); z-index:201;
+    display:flex; flex-direction:column;
+    transform:translateX(100%); transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+  .cart-panel.open { transform:translateX(0); }
+  .cart-header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:22px 24px; border-bottom:0.5px solid var(--line);
+  }
+  .cart-header h2 { font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:500; font-size:20px; }
+  .cart-close { cursor:pointer; font-size:22px; color:var(--ink-soft); background:none; border:none; }
+  .cart-items { flex:1; overflow-y:auto; padding:8px 24px; }
+  .cart-item { display:flex; gap:14px; padding:18px 0; border-bottom:0.5px solid var(--line); }
+  .cart-item-photo {
+    width:76px; height:96px; background:#E4E4E0; border-radius:2px;
+    flex-shrink:0; display:flex; align-items:center; justify-content:center;
+    font-size:9px; color:#a8a8a3; overflow:hidden;
+  }
+  .cart-item-photo img { width:100%; height:100%; object-fit:cover; display:block; }
+  .cart-item-info { flex:1; display:flex; flex-direction:column; }
+  .cart-item-name { font-size:13px; margin-bottom:2px; }
+  .cart-item-bottom { display:flex; align-items:center; justify-content:space-between; margin-top:auto; }
+  .qty-control { display:flex; align-items:center; gap:10px; border:0.5px solid var(--line); border-radius:3px; }
+  .qty-control button { width:26px; height:26px; background:none; border:none; font-size:14px; cursor:pointer; }
+  .qty-control span { font-size:12px; min-width:14px; text-align:center; }
+  .cart-item-price { font-size:13px; font-weight:500; }
+  .cart-item-remove { background:none; border:none; font-size:11px; color:var(--ink-soft); text-decoration:underline; cursor:pointer; margin-top:6px; align-self:flex-start; }
+  .cart-empty { text-align:center; padding:60px 20px; color:var(--ink-soft); font-size:13px; }
+  .cart-footer { border-top:0.5px solid var(--line); padding:20px 24px 26px; display:none; }
+  .cart-subtotal { display:flex; justify-content:space-between; font-size:14px; margin-bottom:18px; }
+  .cart-subtotal strong { font-weight:500; }
+  .pay-options { display:flex; flex-direction:column; gap:10px; }
+  .pay-btn {
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    width:100%; padding:14px; border-radius:3px; font-size:13px;
+    cursor:pointer; border:none; font-family:'Montserrat',sans-serif;
+  }
+  .pay-btn.card { background:var(--ink); color:#fff; }
+  .pay-btn.card:hover { background:#000; }
+  .pay-btn.sbp { background:#fff; color:var(--ink); border:1px solid var(--line); }
+  .pay-btn.sbp:hover { background:#f2f2ef; }
+  .pay-btn svg { width:18px; height:18px; }
+
+  .toast {
+    position:fixed; bottom:28px; left:50%;
+    transform:translateX(-50%) translateY(20px);
+    background:var(--ink); color:#fff; padding:13px 22px;
+    border-radius:3px; font-size:13px; z-index:300;
+    opacity:0; pointer-events:none; transition:opacity 0.3s ease, transform 0.3s ease;
+  }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+  /* FOOTER */
   footer { background:var(--ink); color:rgba(255,255,255,0.7); text-align:center; padding:48px 24px 32px; margin-top:80px; }
   footer .footer-logo { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:24px; color:var(--blue); display:block; margin-bottom:24px; }
   footer .footer-links { display:flex; flex-wrap:wrap; justify-content:center; gap:18px; list-style:none; margin-bottom:18px; }
@@ -75,8 +138,9 @@
 <body>
 
 <nav class="nav">
+  <a class="nav-back" href="index.html">&#9776;</a>
   <a class="nav-logo" href="index.html">The Gabby</a>
-  <a class="nav-back" href="index.html">&larr; на главную</a>
+  <span class="nav-bag" id="cartTrigger">&#128722;<span class="cart-badge" id="cartBadge"></span></span>
 </nav>
 
 <main>
@@ -92,7 +156,7 @@
 <footer>
   <span class="footer-logo">The Gabby</span>
   <ul class="footer-links">
-    <li><a href="catalog.html">каталог</a></li>
+    <li><a href="/catalog.html">каталог</a></li>
     <li><a href="about.html">о бренде</a></li>
     <li><a href="delivery.html">доставка и оплата</a></li>
     <li><a href="sizes.html">размерная сетка</a></li>
@@ -103,14 +167,149 @@
   <p class="footer-legal">© 2026 The Gabby. Политика конфиденциальности</p>
 </footer>
 
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <h2>Корзина</h2>
+    <button class="cart-close" onclick="closeCart()">&times;</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty">Корзина пока пуста.<br>Самое время это исправить.</div>
+  </div>
+  <div class="cart-footer" id="cartFooter">
+    <div class="cart-subtotal"><span>Итого</span><strong id="cartTotal">0 ₽</strong></div>
+    <div class="pay-options">
+      <button class="pay-btn card" onclick="payWith('card')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        оплатить картой
+      </button>
+      <button class="pay-btn sbp" onclick="payWith('sbp')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2 L20 7 L20 17 L12 22 L4 17 L4 7 Z"/></svg>
+        оплатить через СБП
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
 <script>
-  function formatPrice(n) {
-    return Math.round(n).toLocaleString('ru-RU') + ' ₽';
+  let cart = JSON.parse(sessionStorage.getItem('gabby_cart') || '[]');
+  let products = [];
+
+  function saveCart() { sessionStorage.setItem('gabby_cart', JSON.stringify(cart)); }
+
+  function formatPrice(n) { return Math.round(n).toLocaleString('ru-RU') + ' ₽'; }
+
+  function renderCart() {
+    const itemsEl = document.getElementById('cartItems');
+    const footerEl = document.getElementById('cartFooter');
+    const badgeEl = document.getElementById('cartBadge');
+    const totalCount = cart.reduce((sum, i) => sum + i.qty, 0);
+
+    if (totalCount > 0) {
+      badgeEl.style.display = 'flex';
+      badgeEl.textContent = totalCount;
+    } else {
+      badgeEl.style.display = 'none';
+    }
+
+    if (cart.length === 0) {
+      itemsEl.innerHTML = '<div class="cart-empty">Корзина пока пуста.<br>Самое время это исправить.</div>';
+      footerEl.style.display = 'none';
+      return;
+    }
+
+    footerEl.style.display = 'block';
+    itemsEl.innerHTML = cart.map((item, index) => `
+      <div class="cart-item">
+        <div class="cart-item-photo">${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.name}">` : item.name}</div>
+        <div class="cart-item-info">
+          <span class="cart-item-name">${item.name}</span>
+          <div class="cart-item-bottom">
+            <div class="qty-control">
+              <button onclick="changeQty(${index}, -1)">&minus;</button>
+              <span>${item.qty}</span>
+              <button onclick="changeQty(${index}, 1)">+</button>
+            </div>
+            <span class="cart-item-price">${formatPrice(item.price * item.qty)}</span>
+          </div>
+          <button class="cart-item-remove" onclick="removeItem(${index})">удалить</button>
+        </div>
+      </div>
+    `).join('');
+
+    document.getElementById('cartTotal').textContent = formatPrice(cart.reduce((sum, i) => sum + i.price * i.qty, 0));
+  }
+
+  function addToCart(productId) {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+    const existing = cart.find(i => i.productId === productId);
+    if (existing) existing.qty += 1;
+    else cart.push({ productId, name: product.name, price: product.price, imageUrl: product.image_url, qty: 1 });
+    saveCart();
+    renderCart();
+    showToast(product.name + ' — добавлено в корзину');
+    openCart();
+  }
+
+  function changeQty(index, delta) {
+    cart[index].qty += delta;
+    if (cart[index].qty <= 0) cart.splice(index, 1);
+    saveCart();
+    renderCart();
+  }
+
+  function removeItem(index) {
+    cart.splice(index, 1);
+    saveCart();
+    renderCart();
+  }
+
+  function openCart() {
+    document.getElementById('cartOverlay').classList.add('open');
+    document.getElementById('cartPanel').classList.add('open');
+  }
+
+  function closeCart() {
+    document.getElementById('cartOverlay').classList.remove('open');
+    document.getElementById('cartPanel').classList.remove('open');
+  }
+
+  document.getElementById('cartTrigger').addEventListener('click', openCart);
+
+  async function payWith(method) {
+    if (cart.length === 0) return;
+    const payBtns = document.querySelectorAll('.pay-btn');
+    payBtns.forEach(b => b.disabled = true);
+    showToast('Переходим к оплате…');
+    try {
+      const res = await fetch('/api/create-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cart: cart.map(i => ({ productId: i.productId, qty: i.qty })), paymentMethod: method }),
+      });
+      const data = await res.json();
+      if (!res.ok) { showToast(data.error || 'Не удалось создать заказ'); payBtns.forEach(b => b.disabled = false); return; }
+      window.location.href = data.confirmationUrl;
+    } catch {
+      showToast('Ошибка соединения, попробуйте ещё раз');
+      payBtns.forEach(b => b.disabled = false);
+    }
+  }
+
+  let toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
   }
 
   async function loadProducts() {
     const grid = document.getElementById('collectionGrid');
-    let products = [];
     try {
       const res = await fetch('/api/products');
       if (!res.ok) throw new Error();
@@ -119,24 +318,23 @@
       grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--ink-soft);font-size:13px;">не удалось загрузить коллекцию, попробуйте обновить страницу</p>';
       return;
     }
-
     if (!products.length) {
       grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--ink-soft);font-size:13px;">коллекция скоро появится</p>';
       return;
     }
-
     grid.innerHTML = products.map(p => `
       <div class="product-card">
-        <div class="product-photo">${p.image_url
-          ? `<img src="${p.image_url}" alt="${p.name}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${p.name}'}))">`
-          : p.name}</div>
+        <div class="product-photo">${p.image_url ? `<img src="${p.image_url}" alt="${p.name}" loading="lazy">` : p.name}</div>
         <p class="product-name">${p.name}</p>
         <p class="product-price">${formatPrice(p.price)}</p>
-        <a href="index.html#collection" class="btn-primary">в корзину</a>
+        <button class="add-to-cart" onclick="addToCart('${p.id}')" ${p.stock <= 0 ? 'disabled' : ''}>
+          ${p.stock <= 0 ? 'нет в наличии' : 'добавить в корзину'}
+        </button>
       </div>
     `).join('');
   }
 
+  renderCart();
   loadProducts();
 </script>
 </body>

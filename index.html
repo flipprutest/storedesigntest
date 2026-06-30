@@ -998,8 +998,10 @@
   }, { threshold: 0.15 });
   reveals.forEach(el => observer.observe(el));
 
-  let cart = [];      // [{ productId, name, price, qty }]
-  let products = [];  // loaded from /api/products
+  let cart = JSON.parse(sessionStorage.getItem('gabby_cart') || '[]');
+  let products = [];
+
+  function saveCart() { sessionStorage.setItem('gabby_cart', JSON.stringify(cart)); }
 
   function formatPrice(n) {
     return Math.round(n).toLocaleString('ru-RU') + ' ₽';
@@ -1041,6 +1043,7 @@
     const existing = cart.find(item => item.productId === productId);
     if (existing) existing.qty += 1;
     else cart.push({ productId, name: product.name, price: product.price, imageUrl: product.image_url, qty: 1 });
+    saveCart();
     renderCart();
     showToast(product.name + ' — добавлено в корзину');
     openCart();
@@ -1049,11 +1052,13 @@
   function changeQty(index, delta) {
     cart[index].qty += delta;
     if (cart[index].qty <= 0) cart.splice(index, 1);
+    saveCart();
     renderCart();
   }
 
   function removeItem(index) {
     cart.splice(index, 1);
+    saveCart();
     renderCart();
   }
 
@@ -1154,6 +1159,7 @@
     toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
   }
 
+  renderCart();
   loadProducts();
 
   // ── COOKIE BANNER + YANDEX METRIKA ──
