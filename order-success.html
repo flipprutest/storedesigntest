@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Спасибо за заказ — The Gabby</title>
+<title>Ð¡Ð¿Ð°ÑÐ¸Ð±Ð¾ Ð·Ð° Ð·Ð°ÐºÐ°Ð· â€” The Gabby</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -24,25 +24,25 @@
 </head>
 <body>
   <div class="card">
-    <h1>Спасибо за заказ</h1>
-    <p id="status">Проверяем статус оплаты…</p>
+    <h1>Ð¡Ð¿Ð°ÑÐ¸Ð±Ð¾ Ð·Ð° Ð·Ð°ÐºÐ°Ð·</h1>
+    <p id="status">ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ ÑÑ‚Ð°Ñ‚ÑƒÑ Ð¾Ð¿Ð»Ð°Ñ‚Ñ‹â€¦</p>
     <p id="orderIdLine" style="display:none;font-size:13px;margin-top:8px;"></p>
-    <a id="trackLink" href="track.html" style="display:none">отследить заказ →</a>
-    <a href="/">вернуться в магазин</a>
+    <a id="trackLink" href="track.html" style="display:none">Ð¾Ñ‚ÑÐ»ÐµÐ´Ð¸Ñ‚ÑŒ Ð·Ð°ÐºÐ°Ð· â†’</a>
+    <a href="/">Ð²ÐµÑ€Ð½ÑƒÑ‚ÑŒÑÑ Ð² Ð¼Ð°Ð³Ð°Ð·Ð¸Ð½</a>
   </div>
 
 <script>
   // The order is actually confirmed server-side by the YooKassa webhook,
-  // not by this page — this is just a friendly status check for the customer.
+  // not by this page â€” this is just a friendly status check for the customer.
   const params = new URLSearchParams(window.location.search);
   const orderId = params.get('order');
   const statusEl = document.getElementById('status');
 
   if (!orderId) {
-    statusEl.textContent = 'Если оплата прошла успешно, мы скоро свяжемся с вами.';
+    statusEl.textContent = 'Ð•ÑÐ»Ð¸ Ð¾Ð¿Ð»Ð°Ñ‚Ð° Ð¿Ñ€Ð¾ÑˆÐ»Ð° ÑƒÑÐ¿ÐµÑˆÐ½Ð¾, Ð¼Ñ‹ ÑÐºÐ¾Ñ€Ð¾ ÑÐ²ÑÐ¶ÐµÐ¼ÑÑ Ñ Ð²Ð°Ð¼Ð¸.';
   } else {
-    statusEl.textContent = 'Мы свяжемся с вами для подтверждения заказа.';
-    document.getElementById('orderIdLine').textContent = 'Номер заказа: ' + orderId;
+    statusEl.textContent = 'ÐœÑ‹ ÑÐ²ÑÐ¶ÐµÐ¼ÑÑ Ñ Ð²Ð°Ð¼Ð¸ Ð´Ð»Ñ Ð¿Ð¾Ð´Ñ‚Ð²ÐµÑ€Ð¶Ð´ÐµÐ½Ð¸Ñ Ð·Ð°ÐºÐ°Ð·Ð°.';
+    document.getElementById('orderIdLine').textContent = 'ÐÐ¾Ð¼ÐµÑ€ Ð·Ð°ÐºÐ°Ð·Ð°: ' + orderId;
     document.getElementById('orderIdLine').style.display = 'block';
     const trackLink = document.getElementById('trackLink');
     trackLink.href = 'track.html?order=' + encodeURIComponent(orderId);
@@ -51,3 +51,4 @@
 </script>
 </body>
 </html>
+

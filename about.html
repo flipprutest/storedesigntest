@@ -87,6 +87,15 @@
   footer .footer-links a { color:rgba(255,255,255,0.8); text-decoration:none; font-size:12.5px; }
   footer .footer-links a:hover { color:#fff; text-decoration:underline; }
   footer .footer-legal { font-size:11px; color:rgba(255,255,255,0.35); margin-top:18px; }
+
+  /* Scrollbar */
+  html { scrollbar-width: thin; scrollbar-color: transparent transparent; }
+  html.sb-visible { scrollbar-color: #BD451E rgba(26,26,24,0.07); }
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: transparent; border-radius: 3px; transition: background 0.25s ease; }
+  html.sb-visible ::-webkit-scrollbar-thumb { background: #BD451E; }
+  html.sb-visible ::-webkit-scrollbar-track { background: rgba(26,26,24,0.06); }
 </style>
 </head>
 <body>
@@ -159,6 +168,18 @@
   }
   document.getElementById('cartTrigger').addEventListener('click', openCart);
   renderCart();
+</script>
+<script>
+  (function() {
+    var t;
+    function show() { clearTimeout(t); document.documentElement.classList.add('sb-visible'); }
+    function hide(delay) { t = setTimeout(function() { document.documentElement.classList.remove('sb-visible'); }, delay || 400); }
+    document.addEventListener('mousemove', function(e) {
+      if (e.clientX >= window.innerWidth - 40) { show(); } else { clearTimeout(t); hide(400); }
+    });
+    document.addEventListener('wheel', function() { show(); hide(800); });
+    document.addEventListener('mouseleave', function() { clearTimeout(t); document.documentElement.classList.remove('sb-visible'); });
+  })();
 </script>
 </body>
 </html>
