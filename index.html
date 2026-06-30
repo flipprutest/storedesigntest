@@ -72,6 +72,69 @@
   }
   .nav.scrolled .nav-logo { color: var(--blue-dark); font-size: 20px; }
 
+  /* ===== DRAWER ===== */
+  .drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26,26,24,0.45);
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+  .drawer-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .drawer {
+    position: fixed;
+    top: 0; left: 0;
+    width: 280px;
+    height: 100%;
+    background: var(--offwhite);
+    z-index: 201;
+    display: flex;
+    flex-direction: column;
+    padding: 32px 28px 40px;
+    transform: translateX(-100%);
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+  .drawer.open { transform: translateX(0); }
+  .drawer-close {
+    align-self: flex-end;
+    font-size: 22px;
+    cursor: pointer;
+    color: var(--ink-soft);
+    margin-bottom: 32px;
+    line-height: 1;
+  }
+  .drawer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 22px;
+    color: var(--blue);
+    margin-bottom: 36px;
+  }
+  .drawer-nav {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .drawer-nav li a {
+    display: block;
+    font-size: 13px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+    transition: color 0.2s ease;
+  }
+  .drawer-nav li a:hover { color: var(--blue-dark); }
+
   /* ===== HERO ===== */
   .hero {
     position: relative;
@@ -91,16 +154,13 @@
       radial-gradient(circle at 30% 20%, rgba(255,255,255,0.25), transparent 50%),
       radial-gradient(circle at 75% 70%, rgba(0,0,0,0.12), transparent 55%);
   }
-  .hero-placeholder {
+  .hero-video {
     position: absolute;
     inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    letter-spacing: 0.12em;
-    color: rgba(255,255,255,0.4);
-    text-transform: uppercase;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
   }
   .hero-content {
     position: relative;
@@ -285,16 +345,13 @@
     align-items: flex-end;
     overflow: hidden;
   }
-  .lifestyle-placeholder {
+  .lifestyle-img {
     position: absolute;
     inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    letter-spacing: 0.12em;
-    color: rgba(40,40,38,0.35);
-    text-transform: uppercase;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
   }
   .lifestyle-quote {
     position: relative;
@@ -319,14 +376,15 @@
     .about { grid-template-columns: 1fr 1fr; gap: 56px; }
   }
   .about-photo {
-    background: #E4E4E0;
     aspect-ratio: 4/5;
     border-radius: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #a8a8a3;
-    font-size: 11px;
+    overflow: hidden;
+  }
+  .about-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
   .about-text p {
     font-size: 15px;
@@ -383,6 +441,13 @@
     transition: opacity 0.25s ease;
   }
   .insta-tile:hover { opacity: 0.8; }
+  .insta-tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+  }
   @media (max-width: 600px) {
     .insta-tile { width: 110px; }
   }
@@ -724,14 +789,31 @@
 </head>
 <body>
 
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="drawer" id="drawer">
+  <span class="drawer-close" id="drawerClose">&#10005;</span>
+  <div class="drawer-logo">The Gabby</div>
+  <ul class="drawer-nav">
+    <li><a href="#collection" id="drawerCatalog">каталог</a></li>
+    <li><a href="about.html">о бренде</a></li>
+    <li><a href="delivery.html">доставка и оплата</a></li>
+    <li><a href="sizes.html">размерная сетка</a></li>
+    <li><a href="returns.html">возврат и обмен</a></li>
+    <li><a href="contacts.html">контакты</a></li>
+    <li><a href="track.html">отследить заказ</a></li>
+  </ul>
+</div>
+
 <nav class="nav" id="nav">
-  <span class="nav-burger">&#9776;</span>
+  <span class="nav-burger" id="drawerTrigger">&#9776;</span>
   <span class="nav-logo logo-script">The Gabby</span>
   <span class="nav-bag" id="cartTrigger" role="button" aria-label="Открыть корзину">&#128722;<span class="cart-badge" id="cartBadge" style="display:none">0</span></span>
 </nav>
 
 <section class="hero" style="padding:0; max-width:none;">
-  <div class="hero-placeholder">кампейн-фото — героиня бренда</div>
+  <video class="hero-video" autoplay muted loop playsinline>
+    <source src="hero.mp4" type="video/mp4">
+  </video>
   <div class="scroll-cue"></div>
   <div class="hero-content">
     <p class="hero-quote">«Если ты научишься получать удовольствие,<br>никто не сможет сделать тебя несчастной»</p>
@@ -753,13 +835,13 @@
 </section>
 
 <section class="lifestyle" style="padding:0;">
-  <div class="lifestyle-placeholder">lifestyle-фото — подруга бренда</div>
+  <img class="lifestyle-img" src="lifestyle.png" alt="lifestyle">
   <p class="lifestyle-quote">«Жить красиво — это не повод,<br>это привычка»</p>
 </section>
 
 <section class="reveal">
   <div class="about">
-    <div class="about-photo">фото производства / основательницы</div>
+    <div class="about-photo"><img src="capsule.jpg" alt="капсульная коллекция"></div>
     <div class="about-text">
       <p class="about-title">Дом, рождённый из удовольствия</p>
       <p>Малые капсульные коллекции. Собственное производство в России. Внимание к деталям в каждой вещи — потому что мы верим, что красота начинается с заботы.</p>
@@ -772,18 +854,22 @@
   <p class="eyebrow">@thegabby</p>
   <div class="insta-wrap">
     <div class="insta-track">
-      <div class="insta-tile">фото</div>
-      <div class="insta-tile">фото</div>
-      <div class="insta-tile">фото</div>
-      <div class="insta-tile">фото</div>
-      <div class="insta-tile">фото</div>
-      <div class="insta-tile">фото</div>
-      <div class="insta-tile">фото</div>
-      <div class="insta-tile">фото</div>
-      <div class="insta-tile">фото</div>
-      <div class="insta-tile">фото</div>
-      <div class="insta-tile">фото</div>
-      <div class="insta-tile">фото</div>
+      <div class="insta-tile"><img src="insta1.png" alt=""></div>
+      <div class="insta-tile"><img src="insta2.png" alt=""></div>
+      <div class="insta-tile"><img src="insta3.png" alt=""></div>
+      <div class="insta-tile"><img src="insta4.png" alt=""></div>
+      <div class="insta-tile"><img src="insta5.png" alt=""></div>
+      <div class="insta-tile"><img src="insta6.png" alt=""></div>
+      <div class="insta-tile"><img src="insta7.png" alt=""></div>
+      <div class="insta-tile"><img src="insta8.png" alt=""></div>
+      <div class="insta-tile"><img src="insta1.png" alt=""></div>
+      <div class="insta-tile"><img src="insta2.png" alt=""></div>
+      <div class="insta-tile"><img src="insta3.png" alt=""></div>
+      <div class="insta-tile"><img src="insta4.png" alt=""></div>
+      <div class="insta-tile"><img src="insta5.png" alt=""></div>
+      <div class="insta-tile"><img src="insta6.png" alt=""></div>
+      <div class="insta-tile"><img src="insta7.png" alt=""></div>
+      <div class="insta-tile"><img src="insta8.png" alt=""></div>
     </div>
   </div>
   <a href="#" class="btn-outline insta-follow">подписаться</a>
@@ -863,6 +949,15 @@
     if (window.scrollY > 60) nav.classList.add('scrolled');
     else nav.classList.remove('scrolled');
   });
+
+  const drawer = document.getElementById('drawer');
+  const drawerOverlay = document.getElementById('drawerOverlay');
+  const openDrawer = () => { drawer.classList.add('open'); drawerOverlay.classList.add('open'); };
+  const closeDrawer = () => { drawer.classList.remove('open'); drawerOverlay.classList.remove('open'); };
+  document.getElementById('drawerTrigger').addEventListener('click', openDrawer);
+  document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+  drawerOverlay.addEventListener('click', closeDrawer);
+  document.getElementById('drawerCatalog').addEventListener('click', closeDrawer);
 
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
