@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Контакты — The Gabby</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #7B9BD4; --blue-dark: #4F6FA0; --terracotta: #BD451E;
+    --offwhite: #F9F9F9; --ink: #1A1A18; --ink-soft: #4A4A46; --line: rgba(26,26,24,0.1);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Montserrat',sans-serif; background:var(--offwhite); color:var(--ink); -webkit-font-smoothing:antialiased; }
+  .serif { font-family:'Cormorant Garamond',serif; }
+  a { color:inherit; }
+
+  .nav {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 24px; border-bottom:1px solid var(--line); background:var(--offwhite);
+  }
+  .nav-logo { font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:500; font-size:20px; color:var(--blue-dark); text-decoration:none; }
+  .nav-back { font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); text-decoration:none; }
+  .nav-back:hover { color:var(--ink); }
+
+  main { max-width:760px; margin:0 auto; padding:64px 24px 96px; }
+  .page-eyebrow { font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:14px; }
+  h1 { font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:500; font-size:clamp(28px,5vw,42px); margin-bottom:32px; color:var(--ink); }
+  h2 { font-family:'Cormorant Garamond',serif; font-weight:500; font-size:20px; margin:36px 0 12px; color:var(--ink); }
+  p { font-size:14px; line-height:1.8; color:var(--ink-soft); margin-bottom:14px; }
+  ul.plain { margin:0 0 14px 18px; }
+  ul.plain li { font-size:14px; line-height:1.8; color:var(--ink-soft); margin-bottom:6px; }
+
+  .todo {
+    display:block; margin:6px 0 18px; padding:12px 16px;
+    background:#FBF1E8; border:1px dashed var(--terracotta); border-radius:3px;
+    font-size:12.5px; line-height:1.6; color:#8a3c1f;
+  }
+  .todo b { color:var(--terracotta); }
+
+  table.size-table { width:100%; border-collapse:collapse; margin:18px 0 28px; font-size:13px; }
+  table.size-table th, table.size-table td { border:1px solid var(--line); padding:10px 12px; text-align:center; }
+  table.size-table th { background:var(--paper2,#EFEBE4); font-weight:500; color:var(--ink); }
+  table.size-table td { color:var(--ink-soft); }
+
+  .contact-row { display:flex; gap:10px; align-items:baseline; margin-bottom:10px; font-size:14px; }
+  .contact-row span:first-child { color:var(--ink-soft); min-width:120px; }
+  .contact-row a { color:var(--blue-dark); text-decoration:none; }
+  .contact-row a:hover { text-decoration:underline; }
+
+  footer { background:var(--ink); color:rgba(255,255,255,0.7); text-align:center; padding:48px 24px 32px; margin-top:40px; }
+  footer .footer-logo { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:24px; color:var(--blue); display:block; }
+  footer .footer-links { display:flex; flex-wrap:wrap; justify-content:center; gap:18px; list-style:none; margin:24px 0; }
+  footer .footer-links a { color:rgba(255,255,255,0.8); text-decoration:none; font-size:12.5px; }
+  footer .footer-links a:hover { color:#fff; text-decoration:underline; }
+  footer .footer-legal { font-size:11px; color:rgba(255,255,255,0.35); margin-top:18px; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="index.html">The Gabby</a>
+  <a class="nav-back" href="index.html">&larr; на главную</a>
+</nav>
+
+<main>
+  <p class="page-eyebrow">связь</p>
+  <h1>Контакты</h1>
+  
+  <span class="todo"><b>Заполните:</b> реальный телефон и email — банк-эквайер и покупатели должны иметь возможность с вами связаться.</span>
+  <div class="contact-row"><span>Телефон</span><a href="tel:+70000000000">+7 (___) ___-__-__</a></div>
+  <div class="contact-row"><span>Email</span><a href="mailto:hello@example.com">hello@example.com</a></div>
+  <div class="contact-row"><span>Instagram</span><a href="#">@thegabby</a></div>
+  <div class="contact-row"><span>Адрес шоурума</span><span>[если есть примерка в Москве — укажите адрес/запись]</span></div>
+
+  <h2>Время ответа</h2>
+  <p>[Например: отвечаем в Instagram и по email в течение 1 рабочего дня.]</p>
+  
+</main>
+
+<footer>
+  <span class="footer-logo">The Gabby</span>
+  <ul class="footer-links">
+    <li><a href="index.html#collection">каталог</a></li>
+    <li><a href="about.html">о бренде</a></li>
+    <li><a href="delivery.html">доставка и оплата</a></li>
+    <li><a href="sizes.html">размерная сетка</a></li>
+    <li><a href="returns.html">возврат и обмен</a></li>
+    <li><a href="contacts.html">контакты</a></li>
+  </ul>
+  <p class="footer-legal">© 2026 The Gabby. Политика конфиденциальности</p>
+</footer>
+
+</body>
+</html>
