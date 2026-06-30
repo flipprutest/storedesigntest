@@ -122,7 +122,8 @@
     flex-direction: column;
     gap: 0;
   }
-  .drawer-nav li a {
+  .drawer-nav li a,
+  .drawer-item-toggle {
     display: block;
     font-size: 13px;
     letter-spacing: 0.07em;
@@ -132,8 +133,31 @@
     padding: 14px 0;
     border-bottom: 1px solid var(--line);
     transition: color 0.2s ease;
+    cursor: pointer;
+    user-select: none;
   }
-  .drawer-nav li a:hover { color: var(--blue-dark); }
+  .drawer-nav li a:hover,
+  .drawer-item-toggle:hover { color: var(--blue-dark); }
+  .drawer-arrow {
+    float: right;
+    transition: transform 0.25s ease;
+    display: inline-block;
+  }
+  .drawer-has-sub.open .drawer-arrow { transform: rotate(90deg); }
+  .drawer-sub {
+    list-style: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .drawer-has-sub.open .drawer-sub { max-height: 200px; }
+  .drawer-sub li a {
+    padding: 10px 0 10px 14px;
+    font-size: 12px;
+    border-bottom: none;
+    color: var(--ink-soft);
+  }
+  .drawer-sub li a:hover { color: var(--blue-dark); }
 
   /* ===== HERO ===== */
   .hero {
@@ -794,7 +818,12 @@
   <span class="drawer-close" id="drawerClose">&#10005;</span>
   <div class="drawer-logo">The Gabby</div>
   <ul class="drawer-nav">
-    <li><a href="#collection" id="drawerCatalog">каталог</a></li>
+    <li class="drawer-has-sub">
+      <span class="drawer-item-toggle" id="drawerCatalog">каталог <span class="drawer-arrow">›</span></span>
+      <ul class="drawer-sub">
+        <li><a href="/catalog.html">новая коллекция</a></li>
+      </ul>
+    </li>
     <li><a href="about.html">о бренде</a></li>
     <li><a href="delivery.html">доставка и оплата</a></li>
     <li><a href="sizes.html">размерная сетка</a></li>
@@ -957,7 +986,9 @@
   document.getElementById('drawerTrigger').addEventListener('click', openDrawer);
   document.getElementById('drawerClose').addEventListener('click', closeDrawer);
   drawerOverlay.addEventListener('click', closeDrawer);
-  document.getElementById('drawerCatalog').addEventListener('click', closeDrawer);
+  document.getElementById('drawerCatalog').addEventListener('click', () => {
+    document.querySelector('.drawer-has-sub').classList.toggle('open');
+  });
 
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
