@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Отследить заказ — The Gabby</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #7B9BD4; --blue-dark: #4F6FA0; --terracotta: #BD451E;
+    --offwhite: #F9F9F9; --ink: #1A1A18; --ink-soft: #4A4A46; --line: rgba(26,26,24,0.1);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Montserrat',sans-serif; background:var(--offwhite); color:var(--ink); -webkit-font-smoothing:antialiased; }
+  a { color:inherit; }
+  .nav { display:flex; align-items:center; justify-content:space-between; padding:18px 24px; border-bottom:1px solid var(--line); }
+  .nav-logo { font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:500; font-size:20px; color:var(--blue-dark); text-decoration:none; }
+  .nav-back { font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); text-decoration:none; }
+  main { max-width:480px; margin:0 auto; padding:64px 24px 96px; }
+  h1 { font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:500; font-size:clamp(26px,5vw,34px); margin-bottom:14px; }
+  p.lead { font-size:14px; line-height:1.7; color:var(--ink-soft); margin-bottom:28px; }
+  .lookup-row { display:flex; gap:10px; margin-bottom:28px; }
+  input[type=text] {
+    flex:1; padding:13px 14px; border:1px solid var(--line); border-radius:3px;
+    font-family:'Montserrat',sans-serif; font-size:13px; background:#fff;
+  }
+  input[type=text]:focus { outline:none; border-color:var(--blue-dark); }
+  button {
+    background:var(--terracotta); color:#fff; border:none; padding:13px 22px;
+    border-radius:3px; font-size:12px; letter-spacing:.06em; text-transform:uppercase;
+    cursor:pointer; font-family:'Montserrat',sans-serif;
+  }
+  button:hover { background:#9c3a18; }
+  button:disabled { opacity:0.6; cursor:default; }
+
+  .result { display:none; background:#fff; border:1px solid var(--line); border-radius:4px; padding:24px; }
+  .result.show { display:block; }
+  .result-row { display:flex; justify-content:space-between; padding:10px 0; border-bottom:0.5px solid var(--line); font-size:13px; }
+  .result-row:last-child { border-bottom:none; }
+  .result-row span:first-child { color:var(--ink-soft); }
+  .badge { display:inline-block; padding:4px 12px; border-radius:100px; font-size:11px; letter-spacing:.04em; }
+  .badge.processing { background:#EFEBE4; color:var(--ink-soft); }
+  .badge.shipped { background:#E6F1FB; color:var(--blue-dark); }
+  .badge.delivered { background:#EAF3DE; color:#3B6D11; }
+
+  .cdek-link {
+    display:inline-block; margin-top:18px; font-size:12px; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--blue-dark); text-decoration:none;
+  }
+  .cdek-link:hover { text-decoration:underline; }
+
+  .error { display:none; font-size:13px; color:var(--terracotta); margin-bottom:20px; }
+  .error.show { display:block; }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-logo" href="index.html">The Gabby</a>
+  <a class="nav-back" href="index.html">&larr; на главную</a>
+</nav>
+
+<main>
+  <h1>Отследить заказ</h1>
+  <p class="lead">Введите номер заказа — он указан на странице подтверждения после оплаты и в сообщении, которое мы вам отправили.</p>
+
+  <div class="lookup-row">
+    <input type="text" id="orderInput" placeholder="например, a1b2c3d4-...">
+    <button id="lookupBtn">найти</button>
+  </div>
+
+  <p class="error" id="errorMsg">Заказ с таким номером не найден. Проверьте номер и попробуйте снова.</p>
+
+  <div class="result" id="result">
+    <div class="result-row"><span>Статус оплаты</span><span id="rStatus">—</span></div>
+    <div class="result-row"><span>Статус доставки</span><span id="rDelivery"></span></div>
+    <div class="result-row"><span>Сумма</span><span id="rTotal">—</span></div>
+    <div class="result-row"><span>Дата заказа</span><span id="rDate">—</span></div>
+    <div id="trackingBlock" style="display:none">
+      <div class="result-row"><span>Трек-номер CDEK</span><span id="rTracking">—</span></div>
+      <a class="cdek-link" id="cdekLink" href="https://www.cdek.ru/ru/tracking/" target="_blank" rel="noopener">отследить на сайте CDEK &rarr;</a>
+    </div>
+  </div>
+</main>
+
+<script>
+  const PAYMENT_LABELS = { pending: 'ожидает оплаты', paid: 'оплачен', failed: 'не оплачен', cancelled: 'отменён' };
+  const DELIVERY_LABELS = { processing: 'готовится к отправке', shipped: 'отправлен', delivered: 'доставлен' };
+
+  function formatPrice(n) { return Math.round(n).toLocaleString('ru-RU') + ' ₽'; }
+  function formatDate(iso) {
+    const d = new Date(iso);
+    return d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
+  async function lookupOrder() {
+    const input = document.getElementById('orderInput');
+    const btn = document.getElementById('lookupBtn');
+    const errorEl = document.getElementById('errorMsg');
+    const resultEl = document.getElementById('result');
+    const orderId = input.value.trim();
+
+    errorEl.classList.remove('show');
+    resultEl.classList.remove('show');
+
+    if (!orderId) return;
+
+    btn.disabled = true;
+    btn.textContent = '...';
+
+    try {
+      const res = await fetch('/api/order-status?order=' + encodeURIComponent(orderId));
+      if (!res.ok) {
+        errorEl.classList.add('show');
+        return;
+      }
+      const order = await res.json();
+
+      document.getElementById('rStatus').textContent = PAYMENT_LABELS[order.status] || order.status;
+      const deliveryBadge = document.getElementById('rDelivery');
+      deliveryBadge.innerHTML = `<span class="badge ${order.delivery_status}">${DELIVERY_LABELS[order.delivery_status] || order.delivery_status}</span>`;
+      document.getElementById('rTotal').textContent = formatPrice(order.total);
+      document.getElementById('rDate').textContent = formatDate(order.created_at);
+
+      const trackingBlock = document.getElementById('trackingBlock');
+      if (order.tracking_number) {
+        trackingBlock.style.display = 'block';
+        document.getElementById('rTracking').textContent = order.tracking_number;
+      } else {
+        trackingBlock.style.display = 'none';
+      }
+
+      resultEl.classList.add('show');
+    } catch (err) {
+      console.error(err);
+      errorEl.classList.add('show');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'найти';
+    }
+  }
+
+  document.getElementById('lookupBtn').addEventListener('click', lookupOrder);
+  document.getElementById('orderInput').addEventListener('keydown', e => { if (e.key === 'Enter') lookupOrder(); });
+
+  // Auto-fill from ?order= in the URL, e.g. linked from order-success.html
+  const params = new URLSearchParams(window.location.search);
+  const prefill = params.get('order');
+  if (prefill) {
+    document.getElementById('orderInput').value = prefill;
+    lookupOrder();
+  }
+</script>
+</body>
+</html>

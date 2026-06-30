@@ -26,6 +26,8 @@
   <div class="card">
     <h1>Спасибо за заказ</h1>
     <p id="status">Проверяем статус оплаты…</p>
+    <p id="orderIdLine" style="display:none;font-size:13px;margin-top:8px;"></p>
+    <a id="trackLink" href="track.html" style="display:none">отследить заказ →</a>
     <a href="/">вернуться в магазин</a>
   </div>
 
@@ -39,8 +41,12 @@
   if (!orderId) {
     statusEl.textContent = 'Если оплата прошла успешно, мы скоро свяжемся с вами.';
   } else {
-    // Optional: poll a /api/order-status?order=ID endpoint here if you add one later.
-    statusEl.textContent = 'Номер заказа: ' + orderId.slice(0, 8) + '. Мы свяжемся с вами для подтверждения.';
+    statusEl.textContent = 'Мы свяжемся с вами для подтверждения заказа.';
+    document.getElementById('orderIdLine').textContent = 'Номер заказа: ' + orderId;
+    document.getElementById('orderIdLine').style.display = 'block';
+    const trackLink = document.getElementById('trackLink');
+    trackLink.href = 'track.html?order=' + encodeURIComponent(orderId);
+    trackLink.style.display = 'inline-block';
   }
 </script>
 </body>

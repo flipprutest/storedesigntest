@@ -272,50 +272,6 @@
   }
   .view-all:hover { text-decoration: underline; }
 
-  /* ===== SHOWCASE (moving strip) ===== */
-  .showcase-section { padding-top: 0; }
-  .showcase-wrap {
-    overflow: hidden;
-    margin-top: 40px;
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 40px, #000 calc(100% - 40px), transparent);
-    mask-image: linear-gradient(90deg, transparent, #000 40px, #000 calc(100% - 40px), transparent);
-  }
-  .showcase-track {
-    display: flex;
-    gap: 18px;
-    width: max-content;
-    animation: showcase-scroll 32s linear infinite;
-  }
-  .showcase-wrap:hover .showcase-track { animation-play-state: paused; }
-  @keyframes showcase-scroll {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-  .showcase-card {
-    flex: 0 0 auto;
-    width: 180px;
-    cursor: pointer;
-  }
-  .showcase-photo {
-    background: #E4E4E0;
-    aspect-ratio: 3/4;
-    border-radius: 2px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #a8a8a3;
-    font-size: 10px;
-    text-align: center;
-    padding: 6px;
-  }
-  .showcase-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .showcase-name { font-size: 12px; color: var(--ink); margin-top: 10px; }
-  .showcase-price { font-size: 12px; font-weight: 500; color: var(--terracotta); margin-top: 2px; }
-  @media (prefers-reduced-motion: reduce) {
-    .showcase-track { animation: none; }
-  }
-
   /* ===== LIFESTYLE BANNER ===== */
   .lifestyle {
     position: relative;
@@ -395,16 +351,26 @@
   .about-link:hover { text-decoration: underline; }
 
   /* ===== INSTAGRAM ===== */
-  .instagram-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
+  .insta-wrap {
+    overflow: hidden;
     margin-top: 40px;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 40px, #000 calc(100% - 40px), transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 40px, #000 calc(100% - 40px), transparent);
   }
-  @media (min-width: 720px) {
-    .instagram-grid { grid-template-columns: repeat(6, 1fr); }
+  .insta-track {
+    display: flex;
+    gap: 6px;
+    width: max-content;
+    animation: insta-scroll 28s linear infinite;
+  }
+  .insta-wrap:hover .insta-track { animation-play-state: paused; }
+  @keyframes insta-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
   }
   .insta-tile {
+    flex: 0 0 auto;
+    width: 150px;
     background: #E4E4E0;
     aspect-ratio: 1;
     border-radius: 2px;
@@ -417,6 +383,12 @@
     transition: opacity 0.25s ease;
   }
   .insta-tile:hover { opacity: 0.8; }
+  @media (max-width: 600px) {
+    .insta-tile { width: 110px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .insta-track { animation: none; }
+  }
   .insta-follow {
     display: block;
     text-align: center;
@@ -780,13 +752,6 @@
   <a href="#" class="view-all">смотреть всё →</a>
 </section>
 
-<section class="reveal showcase-section">
-  <p class="eyebrow">витрина</p>
-  <div class="showcase-wrap">
-    <div class="showcase-track" id="showcaseTrack"></div>
-  </div>
-</section>
-
 <section class="lifestyle" style="padding:0;">
   <div class="lifestyle-placeholder">lifestyle-фото — подруга бренда</div>
   <p class="lifestyle-quote">«Жить красиво — это не повод,<br>это привычка»</p>
@@ -805,13 +770,21 @@
 
 <section class="reveal">
   <p class="eyebrow">@thegabby</p>
-  <div class="instagram-grid">
-    <div class="insta-tile">фото</div>
-    <div class="insta-tile">фото</div>
-    <div class="insta-tile">фото</div>
-    <div class="insta-tile">фото</div>
-    <div class="insta-tile">фото</div>
-    <div class="insta-tile">фото</div>
+  <div class="insta-wrap">
+    <div class="insta-track">
+      <div class="insta-tile">фото</div>
+      <div class="insta-tile">фото</div>
+      <div class="insta-tile">фото</div>
+      <div class="insta-tile">фото</div>
+      <div class="insta-tile">фото</div>
+      <div class="insta-tile">фото</div>
+      <div class="insta-tile">фото</div>
+      <div class="insta-tile">фото</div>
+      <div class="insta-tile">фото</div>
+      <div class="insta-tile">фото</div>
+      <div class="insta-tile">фото</div>
+      <div class="insta-tile">фото</div>
+    </div>
   </div>
   <a href="#" class="btn-outline insta-follow">подписаться</a>
 </section>
@@ -841,6 +814,7 @@
     <li><a href="sizes.html">размерная сетка</a></li>
     <li><a href="returns.html">возврат и обмен</a></li>
     <li><a href="contacts.html">контакты</a></li>
+    <li><a href="track.html">отследить заказ</a></li>
   </ul>
   <svg class="footer-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
   <p class="footer-legal">© 2026 The Gabby. Политика конфиденциальности</p>
@@ -931,23 +905,6 @@
         <button class="add-to-cart" onclick="addToCart('${p.id}')" ${p.stock <= 0 ? 'disabled' : ''}>
           ${p.stock <= 0 ? 'нет в наличии' : 'добавить в корзину'}
         </button>
-      </div>
-    `).join('');
-
-    renderShowcase();
-  }
-
-  function renderShowcase() {
-    var track = document.getElementById('showcaseTrack');
-    if (!track || !products.length) return;
-    // Duplicate the list once so the loop can scroll exactly 50% and land
-    // back at an identical frame — that's what makes it look seamless.
-    var doubled = products.concat(products);
-    track.innerHTML = doubled.map(p => `
-      <div class="showcase-card" onclick="addToCart('${p.id}')">
-        <div class="showcase-photo">${p.image_url ? `<img src="${p.image_url}" alt="${p.name}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${p.name}'}))">` : p.name}</div>
-        <p class="showcase-name">${p.name}</p>
-        <p class="showcase-price">${formatPrice(p.price)}</p>
       </div>
     `).join('');
   }
